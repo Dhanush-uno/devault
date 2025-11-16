@@ -1,28 +1,46 @@
 import { useEffect, useState } from "react";
-import axios from "../api/axios";
-import useAuth from "../hooks/useAuth";
+import axios from "axios";
 
 export default function Snippets() {
-  const { token } = useAuth();
   const [snippets, setSnippets] = useState([]);
 
+  const load = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get("http://localhost:5000/api/snippets", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setSnippets(res.data);
+    } catch (err) {
+      console.log("Error:", err);
+      alert("Unauthorized / Token missing");
+    }
+  };
+
   useEffect(() => {
-    axios
-      .get("/snippets", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => setSnippets(res.data));
+    load();
   }, []);
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h2>Your Snippets</h2>
-      {snippets.map((s) => (
-        <div key={s._id}>
-          <h3>{s.title}</h3>
-          <pre>{s.code}</pre>
-        </div>
-      ))}
+      <hr />
+
+      {snippets.length === 0 ? (
+        <p>No snippets found</p>
+      ) : (
+        snippets.map((s) => (
+          <div key={s._id} style={{ marginBottom: "15px" }}>
+            <h3>{s.title}</h3>
+            <p>{s.code}</p>
+            <hr />
+          </div>
+        ))
+      )}
     </div>
   );
 }
