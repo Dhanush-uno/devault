@@ -1,68 +1,23 @@
-/* Reset */
+/* Reset & base styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
 }
 
-/* Body */
 body {
-  background: #f7f7f7;
-  color: #222;
-  padding: 20px;
+  font-family: "Inter", sans-serif;
+  background: #f7f8fa;
+  color: #333;
 }
 
-/* Forms */
-form {
-  max-width: 400px;
-  background: #fff;
-  padding: 20px;
-  margin: 30px auto;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-form input,
-form textarea {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0 15px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  outline: none;
+a {
+  text-decoration: none;
 }
 
 button {
-  padding: 10px 15px;
-  background: #333;
-  color: white;
-  border: none;
   cursor: pointer;
-  border-radius: 6px;
-}
-
-button:hover {
-  background: #555;
-}
-
-/* Navbar */
-nav {
-  background: #222;
-  color: white;
-  padding: 12px 20px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-}
-
-nav a {
-  color: #fff;
-  margin-right: 12px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-nav button {
-  background: crimson;
-  margin-left: 10px;
+  border: none;
+  outline: none;
+  font-family: inherit;
 }

@@ -1,0 +1,32 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: #4a73ff;
+  color: white;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.brand {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.navLinks {
+  display: flex;
+  gap: 16px;
+}
+
+.navLink {
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+  color: #dce4ff;
+}
