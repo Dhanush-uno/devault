@@ -10,7 +10,7 @@ export default function Snippets() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get("http://localhost:5000/api/snippets", {
+        const res = await axios.get("https://backendofdevault.onrender.com/api/snippets", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

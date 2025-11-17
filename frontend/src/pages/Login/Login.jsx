@@ -14,16 +14,17 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "https://backendofdevault.onrender.com/api/auth/login",
+        { email, password }
+      );
 
-      console.log("LOGIN RESPONSE:", res.data); // 👈 shows token + id
-      localStorage.setItem("token", res.data.token); // 👈 store token
+      console.log("LOGIN RESPONSE:", res.data);
+
+      localStorage.setItem("token", res.data.token);
 
       alert("Login successful!");
-      navigate("/dashboard"); // redirect
+      navigate("/dashboard");
 
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");
