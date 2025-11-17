@@ -1,25 +1,43 @@
 import { useState } from "react";
+import axios from "axios";
 import styles from "./AddSnippet.module.css";
-
 
 export default function AddSnippet() {
   const [title, setTitle] = useState("");
-  const [language, setLanguage] = useState("");
   const [code, setCode] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // For now, just log values
-    console.log({ title, language, code });
-    alert("Snippet added!");
-    setTitle("");
-    setLanguage("");
-    setCode("");
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await axios.post(
+        "http://localhost:5000/api/snippets",
+        { title, code },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Snippet saved:", res.data); // 👈 NOW YOU SEE IT
+      alert("Snippet added successfully!");
+
+      setTitle("");
+      setCode("");
+
+    } catch (error) {
+      console.error("Failed to add snippet:", error.response?.data || error);
+      alert("Failed to add snippet");
+    }
   };
 
   return (
     <div className={styles.wrapper}>
       <h1>Add New Snippet</h1>
+
       <form className={styles.form} onSubmit={handleSubmit}>
         <label>
           Title
@@ -28,17 +46,6 @@ export default function AddSnippet() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Snippet title"
-            required
-          />
-        </label>
-
-        <label>
-          Language
-          <input
-            type="text"
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            placeholder="e.g., JavaScript, Python"
             required
           />
         </label>

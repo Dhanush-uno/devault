@@ -9,20 +9,24 @@ export default function Snippets() {
     const loadSnippets = async () => {
       try {
         const token = localStorage.getItem("token");
+
         const res = await axios.get("http://localhost:5000/api/snippets", {
           headers: { Authorization: `Bearer ${token}` },
         });
+
         setSnippets(res.data);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load snippets:", err);
       }
     };
+
     loadSnippets();
   }, []);
 
   return (
     <div className={styles.wrapper}>
       <h1>My Snippets</h1>
+
       {snippets.length === 0 ? (
         <p>No snippets yet!</p>
       ) : (
@@ -30,7 +34,6 @@ export default function Snippets() {
           {snippets.map((s) => (
             <div key={s._id} className={styles.card}>
               <h3>{s.title}</h3>
-              <p>{s.language}</p>
               <pre>{s.code}</pre>
             </div>
           ))}

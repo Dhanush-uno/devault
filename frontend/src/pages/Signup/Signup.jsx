@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import axios from "axios";
 import styles from "./Signup.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -7,48 +9,70 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log({ name, email, password });
-    // Simulate API call
-    setTimeout(() => setLoading(false), 1000);
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/signup", {
+        name,
+        email,
+        password,
+      });
+
+      console.log("SIGNUP RESPONSE:", res.data);
+      localStorage.setItem("token", res.data.token);
+
+      alert("Signup successful!");
+      navigate("/dashboard");
+
+    } catch (err) {
+      alert(err.response?.data?.msg || "Signup failed");
+    }
+
+    setLoading(false);
   };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
-        <h2 className={styles.title}>Signup</h2>
-        <p className={styles.subtitle}>Create your account</p>
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <h2 className={styles.title}>Create Account</h2>
+        <p className={styles.subtitle}>Join DevVault today</p>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
           <input
-            type="text"
-            placeholder="Name"
+            className={styles.input}
+            placeholder="Full Name"
+            required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className={styles.input}
-            required
           />
+
           <input
             type="email"
+            className={styles.input}
             placeholder="Email"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className={styles.input}
-            required
           />
+
           <input
             type="password"
+            className={styles.input}
             placeholder="Password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={styles.input}
-            required
           />
-          <button type="submit" className={styles.btn} disabled={loading}>
-            {loading ? "Signing up..." : "Signup"}
+
+          <button className={styles.btn} disabled={loading}>
+            {loading ? "Creating..." : "Signup"}
           </button>
         </form>
+
         <p className={styles.switchText}>
           Already have an account? <a href="/login">Login</a>
         </p>

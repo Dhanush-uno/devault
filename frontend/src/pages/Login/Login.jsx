@@ -1,17 +1,35 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import axios from "axios";
 import styles from "./Login.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log({ email, password });
-    // Simulate API call
-    setTimeout(() => setLoading(false), 1000);
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
+
+      console.log("LOGIN RESPONSE:", res.data); // 👈 shows token + id
+      localStorage.setItem("token", res.data.token); // 👈 store token
+
+      alert("Login successful!");
+      navigate("/dashboard"); // redirect
+
+    } catch (err) {
+      alert(err.response?.data?.msg || "Login failed");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -19,27 +37,31 @@ export default function Login() {
       <div className={styles.card}>
         <h2 className={styles.title}>Login</h2>
         <p className={styles.subtitle}>Enter your credentials to continue</p>
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
           <input
             type="email"
+            className={styles.input}
             placeholder="Email"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className={styles.input}
-            required
           />
+
           <input
             type="password"
+            className={styles.input}
             placeholder="Password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={styles.input}
-            required
           />
-          <button type="submit" className={styles.btn} disabled={loading}>
+
+          <button className={styles.btn} disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
         <p className={styles.switchText}>
           Don't have an account? <a href="/signup">Signup</a>
         </p>
